@@ -27,7 +27,7 @@
     "test": "mocha test/ --recursive --exit",
     "vue_serve": "vue-cli-service serve --open",
     "vue_build": "vue-cli-service build",
-    "vue_lint": "vue-cli-service lint",
+    "vue_lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@feathersjs/authentication": "^2.1.2",
