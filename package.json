@@ -22,13 +22,12 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
-    "feathers_test": "npm run eslint && npm run mocha",
     "feathers_eslint": "eslint src/. test/. --config .eslintrc.json",
     "feathers_start": "node src/",
-    "feathers_mocha": "mocha test/ --recursive --exit",
+    "test": "mocha test/ --recursive --exit",
     "vue_serve": "vue-cli-service serve --open",
     "vue_build": "vue-cli-service build",
-    "vue_lint": "vue-cli-service lint"
+    "vue_lint": "vue-cli-service lint",
   },
   "dependencies": {
     "@feathersjs/authentication": "^2.1.2",

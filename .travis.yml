@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "node"
+  - "8"
+
+notifications:
+  email: false
+
+cache:
+  directories:
+    - "node_modules"
+
+before_script:
+  - npm run feathers_eslint
+  - npm run vue_lint

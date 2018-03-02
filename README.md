@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Want100Cookies/coffee-runner.svg?branch=develop)](https://travis-ci.org/Want100Cookies/coffee-runner)
+
 # Coffee Runner (WIP)
 
 > Decide who wants coffee and who should get it in a fair matter
