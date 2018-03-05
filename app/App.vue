@@ -1,11 +1,17 @@
 <template>
-  <div id="app">
+  <div class="container" id="app">
+    <div class="row mb-5">
+      <div class="col-md">
+        <h1>
+          Coffee Runner
+        </h1>
+      </div>
+    </div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 
   export default {
     name: 'app',

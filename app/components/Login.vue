@@ -1,9 +1,33 @@
 <template>
-  <div class="login">
-    <p>Login page</p>
-    <input type="email" v-model="user.email" placeholder="email@address.com">
-    <input type="password" v-model="user.password" placeholder="password">
-    <button type="button" v-on:click="login">Login</button>
+  <div id="login">
+
+    <h2>Login</h2>
+
+    <b-form @submit="login">
+      <b-form-group id="emailGroup"
+                    label="Email address:"
+                    label-for="email">
+        <b-form-input id="email"
+                      type="email"
+                      v-model="user.email"
+                      required
+                      placeholder="Enter email">
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group id="passwordGroup"
+                    label="Password:"
+                    label-for="password">
+        <b-form-input id="password"
+                      type="password"
+                      v-model="user.password"
+                      required
+                      placeholder="Enter password">
+        </b-form-input>
+      </b-form-group>
+      <b-button type="submit" variant="primary">Login</b-button>
+      <b-button type="button" to="register" class="ml-2">Register</b-button>
+    </b-form>
   </div>
 </template>
 
@@ -22,6 +46,8 @@
     },
     methods: {
       login: function (event) {
+        event.preventDefault();
+
         store.dispatch('auth/authenticate', {
           strategy: 'local',
           ...this.user

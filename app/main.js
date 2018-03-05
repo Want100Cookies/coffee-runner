@@ -1,44 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import BootstrapVue from 'bootstrap-vue'
+
+import '../node_modules/bootstrap/dist/css/bootstrap.css'
+import '../node_modules/bootstrap-vue/dist/bootstrap-vue.css'
+
 import App from './App.vue'
-import Register from './components/Register'
-import Login from './components/Login'
-import Rooms from './components/Rooms'
 import store from './store'
+import router from './router'
+
+store.dispatch('auth/authenticate');
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
-
-const routes = [
-  {path: '/register', component: Register},
-  {path: '/login', component: Login},
-  {path: '/', component: Rooms}
-];
-
-const publicPages = ['/register', '/login'];
-
-const router = new VueRouter({
-  routes
-});
-
-router.beforeEach((to, from, next) => {
-  console.log(store.state.auth);
-  if (publicPages.includes(to.path) && store.state.auth.user != null) {
-    next('/');
-    console.log("You are already logged in!");
-    return;
-  }
-
-  if (!publicPages.includes(to.path) && store.state.auth.user == null) {
-    next('/login');
-    console.log("You are not logged in!");
-    return;
-  }
-
-  // Todo: handle 404
-
-  next();
-});
+Vue.use(BootstrapVue);
 
 new Vue({
   store,

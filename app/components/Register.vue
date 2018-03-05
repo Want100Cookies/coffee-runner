@@ -1,9 +1,29 @@
 <template>
-  <div class="register">
-    <p>Register page</p>
-    <input type="email" v-model="user.email" placeholder="email@address.com">
-    <input type="password" v-model="user.password" placeholder="password">
-    <button type="button" v-on:click="register">Register</button>
+  <div id="register">
+    <b-form @submit="register">
+      <b-form-group id="emailGroup"
+                    label="Email address:"
+                    label-for="email">
+        <b-form-input id="email"
+                      type="email"
+                      v-model="user.email"
+                      required
+                      placeholder="Enter email">
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group id="passwordGroup"
+                    label="Password:"
+                    label-for="password">
+        <b-form-input id="password"
+                      type="password"
+                      v-model="user.password"
+                      required
+                      placeholder="Enter password">
+        </b-form-input>
+      </b-form-group>
+      <b-button type="submit" variant="primary">Register</b-button>
+    </b-form>
   </div>
 </template>
 
@@ -22,6 +42,8 @@
     },
     methods: {
       register: function (event) {
+        event.preventDefault();
+
         store.dispatch('users/create', this.user).then(() => {
           this.$router.push('login');
         });
