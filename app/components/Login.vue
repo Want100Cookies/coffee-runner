@@ -32,8 +32,6 @@
 </template>
 
 <script>
-  import store from '../store'
-
   export default {
     name: 'Login',
     data() {
@@ -48,7 +46,7 @@
       login: function (event) {
         event.preventDefault();
 
-        store.dispatch('auth/authenticate', {
+        this.$store.dispatch('auth/authenticate', {
           strategy: 'local',
           ...this.user
         }).then(() => {

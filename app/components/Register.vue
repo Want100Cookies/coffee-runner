@@ -28,8 +28,6 @@
 </template>
 
 <script>
-  import store from '../store'
-
   export default {
     name: 'Register',
     data() {
@@ -44,7 +42,7 @@
       register: function (event) {
         event.preventDefault();
 
-        store.dispatch('users/create', this.user).then(() => {
+        this.$store.dispatch('users/create', this.user).then(() => {
           this.$router.push('login');
         });
       }
