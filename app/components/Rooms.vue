@@ -27,9 +27,9 @@
           <b-button :to="`rooms/${room._id}`" variant="primary" class="mr-2" v-b-tooltip.hover title="Join room">
             <font-awesome-icon :icon="icons.faSignInAlt" />
           </b-button>
-          <b-button variant="danger">
-            <font-awesome-icon :icon="icons.faTrash" />
-          </b-button>
+          <!--<b-button variant="danger" v-if="room.userId === ">-->
+            <!--<font-awesome-icon :icon="icons.faTrash" />-->
+          <!--</b-button>-->
         </b-card>
       </div>
 
@@ -111,6 +111,8 @@
     },
     created() {
       this.findRooms({});
+      // get current user from store?
+      console.log(this.$store);
     }
   }
 </script>
