@@ -3,10 +3,10 @@
     <h2 class="mb-4">
       Rooms
       <b-button size="sm" v-b-modal.create-modal class="ml-2 mr-2" v-b-tooltip.hover title="Create new room">
-        <font-awesome-icon :icon="icons.faPlus" />
+        <font-awesome-icon :icon="icons.faPlus"/>
       </b-button>
       <b-button size="sm" v-b-modal.join-modal v-b-tooltip.hover title="Join existing room">
-        <font-awesome-icon :icon="icons.faSignInAlt" />
+        <font-awesome-icon :icon="icons.faSignInAlt"/>
       </b-button>
     </h2>
 
@@ -25,11 +25,11 @@
           </p>
 
           <b-button :to="`rooms/${room._id}`" variant="primary" class="mr-2" v-b-tooltip.hover title="Join room">
-            <font-awesome-icon :icon="icons.faSignInAlt" />
+            <font-awesome-icon :icon="icons.faSignInAlt"/>
           </b-button>
-          <!--<b-button variant="danger" v-if="room.userId === ">-->
-            <!--<font-awesome-icon :icon="icons.faTrash" />-->
-          <!--</b-button>-->
+          <b-button @click="deleteRoom(room)" variant="danger" v-if="room.userId === currUserId">
+            <font-awesome-icon :icon="icons.faTrash"/>
+          </b-button>
         </b-card>
       </div>
 
@@ -65,14 +65,15 @@
 </template>
 
 <script>
-  import {mapGetters, mapActions, mapMutations, mapState} from 'vuex'
-  import {faSignInAlt, faTrash, faPlus} from '@fortawesome/fontawesome-free-solid'
+  import {mapActions, mapGetters} from 'vuex'
+  import {faPlus, faSignInAlt, faTrash} from '@fortawesome/fontawesome-free-solid'
 
   export default {
     name: 'rooms',
     data() {
       return {
         newRoom: {},
+        currUserId: undefined
       }
     },
     computed: {
@@ -93,26 +94,53 @@
     methods: {
       ...mapActions('rooms', {
         findRooms: 'find',
+        createRoomInStore: 'create',
+        removeRoom: 'remove',
       }),
-      createRoom(event) {
-        this.$store.dispatch('rooms/create', this.newRoom)
+      createRoom() {
+        this.createRoomInStore(this.newRoom)
           .then(() => {
             // this.rooms.push(this.newRoom)
           })
-          .catch((error) => {
-            console.log("whoops?");
+          .catch(() => {
+            this.$toasted.error('You can\'t do that!');
           });
         this.newRoom = {};
       },
-      joinRoom(event) {
+      joinRoom() {
         console.log(this.rooms);
         console.log("Join room");
+      },
+      deleteRoom(room) {
+        this.$toasted.show('Are you sure you want to remove this room?', {
+            action: [
+              {
+                text: 'Yes!',
+                onClick: (e, toast) => {
+                  toast.goAway(0);
+                  this.removeRoom(room._id)
+                    .then(() => {
+                      this.$toasted.info('Room removed');
+                    })
+                    .catch(() => {
+                      this.$toasted.error('You can\'t do that!');
+                    });
+                }
+              },
+              {
+                text: 'No...',
+                onClick: (e, toast) => {
+                  toast.goAway(0);
+                }
+              },
+            ]
+          }
+        )
       }
     },
     created() {
       this.findRooms({});
-      // get current user from store?
-      console.log(this.$store);
+      this.currUserId = this.$store.state.auth.user._id;
     }
   }
 </script>
