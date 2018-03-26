@@ -4,11 +4,9 @@ const hooks = require('./room-users.hooks');
 
 module.exports = function (app) {
 
-  const paginate = app.get('paginate');
-
   const options = {
     name: 'room-users',
-    paginate
+    id: '_id',
   };
 
   // Initialize our service with any options it requires
@@ -18,4 +16,23 @@ module.exports = function (app) {
   const service = app.service('room-users');
 
   service.hooks(hooks);
+
+  const TEN_SEC = 10 * 1000;
+
+  setInterval(() => {
+    service.find({
+      query: {
+        lastPing: {
+          $lt: new Date().getTime() - TEN_SEC
+        }
+      }
+    })
+      .then((response) => {
+        for (let item of response) {
+          service
+            .remove(item._id)
+            .then(() => console.log(`Removed entry ${item._id} due to inactivity`));
+        }
+      });
+  }, TEN_SEC);
 };

@@ -10,14 +10,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   plugins: [
     service('users'),
-    service('rooms', {
-      actions: {
-        enterRoom({commit, dispatch}, args) {
-          console.log(args);
-          dispatch('room-users/create', {roomId: args.roomId})
-        }
-      }
-    }),
+    service('rooms'),
     service('room-users'),
     service('coffee-run'),
     service('coffee-choice'),

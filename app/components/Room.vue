@@ -8,6 +8,10 @@
         <font-awesome-icon :icon="icons.faSignOutAlt"/>
       </b-button>
     </h2>
+
+    <ul>
+      <li v-for="user in this.onlineUsers" :key="user.userId">{{user.userId}}</li>
+    </ul>
   </div>
 </template>
 
@@ -17,9 +21,18 @@
 
   export default {
     name: "room",
+    data() {
+      return {
+        roomUserId: false,
+        interval: null,
+      }
+    },
     computed: {
       ...mapGetters('rooms', {
         findRoomInStore: 'find',
+      }),
+      ...mapGetters('room-users', {
+        findUsersInRoom: 'find',
       }),
       room() {
         const result = this.findRoomInStore({query: {_id: this.$route.params.id}});
@@ -29,17 +42,44 @@
         return {
           faSignOutAlt
         }
-      }
+      },
+      onlineUsers() {
+        return this.findUsersInRoom({query: {roomId: this.$route.params.id}}).data;
+      },
     },
     methods: {
       ...mapActions('rooms', {
         findRoom: 'find',
-        enterRoom: 'enterRoom',
       }),
+      ...mapActions('room-users', {
+        enterRoom: 'create',
+        patchRoomUser: 'patch',
+      }),
+      ping() {
+        if (this.roomUserId) {
+          this.patchRoomUser([
+            this.roomUserId,
+            {lastPing: new Date().getTime()}
+          ]);
+        }
+      }
     },
     created() {
       this.findRoom({query: {_id: this.$route.params.id}});
-      this.enterRoom({roomId: this.$route.params.id});
+      this.enterRoom({
+        roomId: this.$route.params.id,
+        lastPing: new Date().getTime()
+      })
+        .then((userRoom) => {
+          this.roomUserId = userRoom._id;
+        });
+
+      this.interval = setInterval(function () {
+        this.ping()
+      }.bind(this), 2000);
+    },
+    beforeDestroy() {
+      clearInterval(this.interval);
     }
   }
 </script>
